@@ -14,58 +14,105 @@ namespace Blog.API.Tests
         public Mock<IBlogService> mock = new Mock<IBlogService>();
         #endregion
 
+        /// <summary>
+        /// success test for saving blogs
+        /// </summary>
         [Fact]
         public async void SaveBlog_Test()
         {
-            var blogDTO = new Models.Blog()
+            try
             {
-                Name = "Test Blog",
-                Content = "test",
-                Title = "test",
-                CreatedUserId = 1,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
-            };
+                var blogDTO = new Models.Blog()
+                {
+                    Name = "Test Blog",
+                    Content = "test",
+                    Title = "test",
+                    CreatedUserId = 1,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
+                };
 
-            var returnBlogDTO = new Models.Blog()
+                var returnBlogDTO = new Models.Blog()
+                {
+                    Id = 1,
+                    Name = blogDTO.Name,
+                    Content = blogDTO.Content,
+                    Title = blogDTO.Title,
+                    CreatedUserId = blogDTO.CreatedUserId,
+                    CreatedDate = blogDTO.CreatedDate,
+                    UpdatedDate = blogDTO.UpdatedDate
+                };
+
+                mock.Setup(p => p.CreateBlog(blogDTO)).ReturnsAsync(returnBlogDTO);
+                BlogController blogController = new BlogController(mock.Object);
+                var result = await blogController.SaveBlog(blogDTO);
+                Assert.True(result.Id > 0);
+            }
+            catch
             {
-                Id = 1,
-                Name = blogDTO.Name,
-                Content = blogDTO.Content,
-                Title = blogDTO.Title,
-                CreatedUserId = blogDTO.CreatedUserId,
-                CreatedDate = blogDTO.CreatedDate,
-                UpdatedDate = blogDTO.UpdatedDate
-            };
+                Assert.True(false);
+            }
+        }
 
-            mock.Setup(p => p.CreateBlog(blogDTO)).ReturnsAsync(returnBlogDTO);
-            BlogController blogController = new BlogController(mock.Object);
-            var result = await blogController.SaveBlog(blogDTO);
-            Assert.True(result.Id > 0);
+        /// <summary>
+        /// success test for updating blogs
+        /// </summary>
+        [Fact]
+        public async void UpdateBlog_Test()
+        {
+            try
+            {
+                var blogDTO = new Models.Blog()
+                {
+                    Id = 1,
+                    Name = "Test Blog",
+                    Content = "test",
+                    Title = "test",
+                    CreatedUserId = 1,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
+                };
+
+                mock.Setup(p => p.CreateBlog(blogDTO)).ReturnsAsync(blogDTO);
+                BlogController blogController = new BlogController(mock.Object);
+                var result = await blogController.SaveBlog(blogDTO);
+                Assert.True(result.Equals(blogDTO));
+            }
+            catch
+            {
+                Assert.True(false);
+            }            
         }
 
         [Fact]
         public async void SaveBlogComment_Test()
         {
-            var blogCommentDTO = new Models.BlogComment()
+            try
             {
-                Comment = "Test comment",
-                CreatedUserId = 1,
-                BlogId = 1
-            };
+                var blogCommentDTO = new Models.BlogComment()
+                {
+                    Comment = "Test comment",
+                    CreatedUserId = 1,
+                    BlogId = 1
+                };
 
-            var returnBlogCommentDTO = new Models.BlogComment()
+                var returnBlogCommentDTO = new Models.BlogComment()
+                {
+                    Id = 1,
+                    Comment = blogCommentDTO.Comment,
+                    CreatedUserId = blogCommentDTO.CreatedUserId,
+                    BlogId = blogCommentDTO.BlogId
+                };
+
+                mock.Setup(p => p.CreateComment(blogCommentDTO)).ReturnsAsync(returnBlogCommentDTO);
+                BlogController blogController = new BlogController(mock.Object);
+                var result = await blogController.SaveComment(blogCommentDTO);
+                Assert.True(returnBlogCommentDTO.Id > 0);
+            }
+            catch
             {
-                Id = 1,
-                Comment = blogCommentDTO.Comment,
-                CreatedUserId = blogCommentDTO.CreatedUserId,
-                BlogId = blogCommentDTO.BlogId
-            };
-
-            mock.Setup(p => p.CreateComment(blogCommentDTO)).ReturnsAsync(returnBlogCommentDTO);
-            BlogController blogController = new BlogController(mock.Object);
-            var result = await blogController.SaveComment(blogCommentDTO);
-            Assert.True(returnBlogCommentDTO.Id > 0);
+                Assert.True(false);
+            }            
         }
     }
 }
