@@ -44,7 +44,7 @@ namespace Blog.API.Controllers
         }
 
         /// <summary>
-        /// Login the user by creating application pool identities
+        /// Login the user by creating application claim identities
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
