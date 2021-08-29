@@ -1,8 +1,10 @@
 using Blog.API.Controllers;
 using Blog.API.Models;
 using Blog.API.Services;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Blog.API.Tests
@@ -38,7 +40,19 @@ namespace Blog.API.Tests
             };
 
             mock.Setup(p => p.SaveUser(userDTO)).ReturnsAsync(returnUserDTO);
-            UserController testController = new UserController(mock.Object);
+
+            var myConfiguration = new Dictionary<string, string>
+            {
+                {"Key1", "Value1"},
+                {"Nested:Key1", "NestedValue1"},
+                {"Nested:Key2", "NestedValue2"}
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(myConfiguration)
+                .Build();
+
+            UserController testController = new UserController(mock.Object, configuration);
             var result = await testController.SaveTest(userDTO);
             Assert.True(returnUserDTO.Id > 0);
         }
