@@ -1,5 +1,6 @@
 ﻿using Blog.API.Models;
 using Blog.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Blog.API.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         #region Property  
@@ -37,6 +39,7 @@ namespace Blog.API.Controllers
         }
 
         [HttpPost("/user/login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] User user)
         {
             var result = await _userService.ValidateUser(user);
