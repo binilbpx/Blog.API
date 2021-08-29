@@ -27,8 +27,23 @@ namespace Blog.API.Services
         /// <returns></returns>
         public async Task<Models.Blog> CreateBlog(Models.Blog blog)
         {
-            _repositoryContext.Blogs.Add(blog);
-            _repositoryContext.SaveChanges();
+            if (blog.Id > 0)
+            {
+                var existingBlog = _repositoryContext.Blogs.Where(c => c.Id == blog.Id).FirstOrDefault();
+
+                existingBlog.Comments = blog.Comments;
+                existingBlog.Content = blog.Content;
+                existingBlog.Name = blog.Name;
+                existingBlog.Title = blog.Title;
+                existingBlog.UpdatedDate = DateTime.Now;
+
+                _repositoryContext.SaveChanges();
+            }
+            else
+            {
+                _repositoryContext.Blogs.Add(blog);
+                _repositoryContext.SaveChanges();
+            }            
 
             return blog;
         }

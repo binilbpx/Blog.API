@@ -26,10 +26,21 @@ namespace Blog.API.Tests
                 CreatedDate = DateTime.Now
             };
 
-            mock.Setup(p => p.SaveUser(userDTO)).ReturnsAsync(userDTO);
+            var returnUserDTO = new User()
+            {
+                Id = 1,
+                Name = userDTO.Name,
+                Email = userDTO.Email,
+                Phone = userDTO.Phone,
+                UserName = userDTO.UserName,
+                Password = userDTO.Password,
+                CreatedDate = userDTO.CreatedDate
+            };
+
+            mock.Setup(p => p.SaveUser(userDTO)).ReturnsAsync(returnUserDTO);
             UserController testController = new UserController(mock.Object);
             var result = await testController.SaveTest(userDTO);
-            Assert.True(userDTO.Equals(result));
+            Assert.True(returnUserDTO.Id > 0);
         }
     }
 }
