@@ -30,6 +30,11 @@ namespace Blog.API.Controllers
         }
         #endregion
 
+        /// <summary>
+        /// Method to create a new user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost("/user/save")]
         public async Task<User> SaveTest([FromBody] User user)
         {
@@ -38,6 +43,11 @@ namespace Blog.API.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Login the user by creating application pool identities
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost("/user/login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] User user)
