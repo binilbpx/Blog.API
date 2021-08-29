@@ -13,5 +13,7 @@ namespace Blog.API.Models
         {
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<BlogComment> BlogComments { get; set; }
     }
 }
