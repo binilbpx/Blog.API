@@ -1,4 +1,5 @@
 ﻿using Blog.API.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,27 @@ namespace Blog.API.Services
             _repositoryContext.SaveChanges();
 
             return user;
+        }
+
+        public async Task<User> GetUser(int id)
+        {
+            return _repositoryContext.Users.Where(c => c.Id == id).FirstOrDefault();
+        }
+
+        public async Task<bool> ValidateUser(User user)
+        {
+            var result =  _repositoryContext.Users.Where(c => 
+            c.UserName == user.UserName && c.Password == user.Password).
+            FirstOrDefault();
+
+            if (result.Id > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
